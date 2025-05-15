@@ -1,0 +1,10 @@
+services:
+    remnanode:
+        container_name: remnanode
+        hostname: remnanode
+        image: remnawave/node:latest
+        restart: always
+        network_mode: host
+        environment:
+          APP_PORT: {{ remna_app_port }}
+          SSL_CERT: {{ remna_ssl_cert }}

@@ -1,0 +1,32 @@
+- name: Create remna dir
+  file:
+    path: "{{ remna_install_path }}"
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+
+- name: Change various sysctl-settings, look at the sysctl-vars file for documentation
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    state: present
+    reload: true
+    ignoreerrors: true
+    sysctl_file: "{{ remna_sysctl_conf }}"
+  with_dict: "{{ remna_sysctl_default | combine(remna_sysctl | default({})) }}"
+
+- name: Create docker compose
+  template:
+    src: docker-compose.yaml.j2
+    dest: "{{ remna_install_path }}/docker-compose.yaml"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Start compose file
+  community.docker.docker_compose_v2:
+    project_src: "{{ remna_install_path }}"
+    remove_orphans: true
+    state: present
