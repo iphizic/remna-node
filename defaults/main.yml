@@ -1,5 +1,7 @@
 remna_install_path: /opt/remnawave
 
+remna_node_version: latest
+
 remna_sysctl_conf: "/etc/sysctl.d/50-remna.conf"
 
 remna_sysctl: {}
